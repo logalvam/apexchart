@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "HomePage",
     component: Home,
   },
   {
@@ -18,6 +18,36 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
+  },
+  {
+    path:'/medlogin',
+    name:'medlogin',
+    component:()=>import("../components/medlogin.vue")
+  },
+  {
+    path:'/adduser',
+    name:'adduser',
+    component:()=>import('../components/useraddbar.vue')
+  },
+  {
+    path:'/bill',
+    name:'bill',
+    component:()=>import('../components/bill.vue')
+  },
+  {
+    path: "/stockView1",
+    name: "stockView1",
+    component: () => import("../components/stockview.vue"),
+  },
+  {
+    path: "/stockentry",
+    name: "stockentry",
+    component: () => import("../components/stockbar.vue"),
+  },
+  {
+    path:'/salesreport',
+    name:'salesreportl',
+    component:()=>import('../components/salesreport.vue')
   },
 ];
 
