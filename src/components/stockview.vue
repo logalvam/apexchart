@@ -19,8 +19,7 @@
         height="400"
         ></v-data-table>
     </v-card>
-    <!-- {{ newarr }}
-     -->
+    <!-- {{ newarr }}-->
     <!-- <v-btn @click="click">click</v-btn> -->
     </div>
 </template>

@@ -87,16 +87,34 @@
 </v-container>
 </v-sheet>
 <!-- print -->
-              <v-btn
-                text
-                @click="print"
-              >Print</v-btn>
+              <v-btn text @click="print" >Print</v-btn>
           </v-card>
         </template>
     </v-dialog>
 
                         <v-btn class="black--text white"  @click="save">Save</v-btn> 
-                        <v-btn class="ml-5" @click="download">Download</v-btn>
+                        <v-dialog  v-model="dialog" max-width="350" >
+                            <template v-slot:activator="{ on, attrs }">
+                                <!-- <v-btn color="primary"  dark v-bind="attrs" v-on="on" > -->
+                                    <v-btn class="ml-5" @click="download" v-bind="attrs" :v-on="von" >Download</v-btn>
+                            <!-- Open Dialog -->
+                            <!-- </v-btn> -->
+                        </template>
+                        <v-card >
+                            <v-card-title class="text-h5">
+                            Which Formate You need To Download?
+                            </v-card-title>
+                            <v-card-actions>
+                                <v-btn color="green darken-1" text @click=downloadcsv>
+                                    CSV
+                                </v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn color="green darken-1" text @click=downloadpdf>
+                                    PDF
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                        </v-dialog>
                     </v-col>
                     <v-col cols="12" md="12" class="d-flex justify-space-around">
                         <h4 class="white--text">Billno:{{ billno }}</h4>
@@ -120,7 +138,7 @@
                 </v-data-table>
             </v-container>
         </v-sheet>
-    
+       
         <div>        
         </div>
         <div>
@@ -188,7 +206,9 @@ import service from "../service/EventServices.js"
           top:false,
           bottom:false,
           right:false,
-          color:''
+          color:'',
+          dialog: false,
+          von:"off"
     }
 },
 
@@ -222,16 +242,7 @@ methods:{
             }
         }
     },
-    download(){
-
-        if (this.tempbill.length<=0){
-            this.text = "Please add items"
-            this.right = true
-            this.top = true
-            this.color = "error"
-            this.snackbar = true
-        } else{
-            // console.log(this.tempbill)
+    downloadcsv(){
         service.DownloadBill(this.tempbill).then((response)=>{
             // console.log(response)
             if(response.data.status =="S"){
@@ -239,22 +250,47 @@ methods:{
                 this.top = true
                 this.right = true
                 this.color = "success"
+                this.dialog = false
+
                 this.text = "Bill Downloaded as Csv"
             }
         }).catch((error)=>{
             console.log(error)
         })
         console.log(this.billno)
+
+        this.dialog = false
+    },
+    downloadpdf(){
         service.DownloadPdf(this.tempbill,this.billno).then((response)=>{
-            // console.log(response.data)
+            console.log(response.data)
             if(response.data.status =="S"){
                 this.snackbar = true
+                this.dialog = false
+                this.top = true
+                this.right = true
+                this.color = "success"
                 this.text = "Bill Downloaded As pdf"
             }
         }).catch((error)=>{
             console.log(error)
         })
+    },
+    download(){
+        if (this.tempbill.length<=0){
+            this.dialog = false
+            this.text = "Please add items"
+            this.right = true
+            this.top = true
+            this.color = "error"
+            this.snackbar = true
+            this.von ="off"
+        } else{
+            this.dialog = true
+            this.von = "on"
         }
+        
+        
         
     },
     print(){
